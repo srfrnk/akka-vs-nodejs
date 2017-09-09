@@ -1,7 +1,9 @@
 FROM node
 
 RUN apt-get update && \
-    apt-get install -yy nginx
+    apt-get install -yy nginx && \
+    npm install pm2 -g
+    
 ADD etc /etc
 
 ADD app /app

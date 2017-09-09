@@ -4,7 +4,7 @@
   "description": "",
   "main": "factorial.js",
   "scripts": {
-    "start": "nginx && node server.js"
+    "start": "nginx && pm2-docker server.json"
   },
   "author": "",
   "license": "ISC",
