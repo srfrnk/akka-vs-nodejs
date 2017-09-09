@@ -5,6 +5,7 @@ import com.typesafe.config.ConfigFactory
 import org.mashupbots.socko.webserver.{WebServerConfig, WebServer}
 import org.mashupbots.socko.routes._
 import calc.FactorialActor
+import calc.FibonacciActor
 import akka.pattern.ask
 import akka.util.Timeout
 import scala.concurrent.{ExecutionContext, duration}
@@ -18,6 +19,7 @@ class RestServer {
 
   def run (args: Array[String]): Unit = {
     lazy val servicePort = ConfigFactory.load().getInt("service.port")
+    lazy val hostname = ConfigFactory.load().getString("service.hostname")
 
     val actorSystem = ActorSystem("RESTServer")
 
@@ -25,10 +27,16 @@ class RestServer {
       case HttpRequest(request) => request match {
         case GET(PathSegments(action :: Nil)) & QueryString(param : String) if action.equals("factorial") =>
           actorSystem.actorOf(Props[FactorialActor]) ! (BigInt(param.split('=')(1)), request)
+        case GET(PathSegments(action :: Nil)) & QueryString(param : String) if action.equals("fibonacci") =>
+          actorSystem.actorOf(Props[FibonacciActor]) ! (BigInt(param.split('=')(1)), request)
+        case GET(PathSegments(action :: Nil)) if action.equals("id") =>
+          request.response.write("Akka")
+        case _ =>
+          request.response.write("OK")
       }
     }
 
-    val webServer = new WebServer(WebServerConfig(port = servicePort),
+    val webServer = new WebServer(WebServerConfig(hostname=hostname,port = servicePort),
       routes,
       actorSystem
     )

@@ -1,4 +1,4 @@
-module.exports.factorial = function factorial (n) {
+module.exports = function factorial (n) {
    var product = 1;
 
    while (n > 1) {

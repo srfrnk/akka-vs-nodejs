@@ -1,0 +1,13 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "factorial.js",
+  "scripts": {
+    "start": "nginx && node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+  }
+}
